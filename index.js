@@ -40,3 +40,9 @@ const onInput = async event => {                    //add async sice we are addi
     }
 }
 input.addEventListener('input', debounce(onInput, 1000))     //for searching movie for every single keypress
+
+document.addEventListener('click', event => {         //when user clicks outside dropdown
+    if (!root.contains(event.target)) {              //autocomplete element is not clicked
+        dropdown.classList.remove('is-active')
+    }
+})
