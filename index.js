@@ -26,6 +26,10 @@ const resultsWrapper = document.querySelector('.results')
 
 const onInput = async event => {                    //add async sice we are adding await
     const movies = await fetchData(event.target.value)          //send input value to api to search movie        //returns promise so add await
+    if (!movies.length) {
+        dropdown.classList.remove('is-active')
+        return
+    }
     dropdown.classList.add('is-active')
     resultsWrapper.innerHTML = ''            //to clear the last search results and avoid overriding results
     for (let movie of movies) {
