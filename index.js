@@ -43,6 +43,7 @@ const onInput = async event => {                    //add async sice we are addi
         option.addEventListener('click', () => {
             dropdown.classList.remove('is-active')    //close dropdown on selecting option
             input.value = movie.Title               //to update movie title in input field when selected
+            onMovieSelect(movie)
         })
         resultsWrapper.appendChild(option)
     }
@@ -54,3 +55,12 @@ document.addEventListener('click', event => {         //when user clicks outside
         dropdown.classList.remove('is-active')
     }
 })
+
+const onMovieSelect = async movie => {
+    const response = await axios.get('http://www.omdbapi.com', {
+        params: {                //query params passed
+            apikey: '279fb3a4',
+            i: movie.imdbID            //for getting the movie details
+        }
+    })
+}
