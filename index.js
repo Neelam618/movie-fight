@@ -40,6 +40,10 @@ const onInput = async event => {                    //add async sice we are addi
             <img src="${imgSrc}">
             <h1>${movie.Title}</h1>
         `;
+        option.addEventListener('click', () => {
+            dropdown.classList.remove('is-active')    //close dropdown on selecting option
+            input.value = movie.Title               //to update movie title in input field when selected
+        })
         resultsWrapper.appendChild(option)
     }
 }
