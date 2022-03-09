@@ -5,6 +5,9 @@ const fetchData = async (searchTerm) => {
             s: searchTerm            //for searching the movie containing searchTerm
         }
     })
+    if (response.data.Error) {
+        return []
+    }
     return response.data.Search            //returns a promise
 }
 
