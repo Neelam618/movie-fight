@@ -27,12 +27,13 @@ const resultsWrapper = document.querySelector('.results')
 const onInput = async event => {                    //add async sice we are adding await
     const movies = await fetchData(event.target.value)          //send input value to api to search movie        //returns promise so add await
     dropdown.classList.add('is-active')
-
+    resultsWrapper.innerHTML = ''            //to clear the last search results and avoid overriding results
     for (let movie of movies) {
+        const imgSrc = movie.Poster === 'N/A' ? '' : movie.Poster   //for broken images show nothing
         const option = document.createElement('a')
         option.classList.add('dropdown-item')
         option.innerHTML = `
-            <img src="${movie.Poster}">
+            <img src="${imgSrc}">
             <h1>${movie.Title}</h1>
         `;
         resultsWrapper.appendChild(option)
