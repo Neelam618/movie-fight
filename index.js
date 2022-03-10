@@ -68,26 +68,28 @@ const onMovieSelect = async (movie, summaryElement, side) => {
     }
 }
 
-// const runComparison = () = {
+const runComparison = () => {
+    const leftSideStats = document.querySelectorAll('#left-summary .notification')
+    const rightSideStats = document.querySelectorAll('#right-summary .notification')
 
-// }
+    leftSideStats.forEach((leftStat, index) => {
+        const rightStat = rightSideStats[index]
+        console.log(leftStat, rightStat);
+    })
+}
+
 const movieTemplate = movieDetail => {
     const dollars = parseInt(movieDetail.BoxOffice.replace(/\$/g, '').replace(/,/g, ''))  //remove dollar sign and comma and convert string into number
     const metascore = parseInt(movieDetail.Metascore)       //convert string into number
     const imdbRating = parseFloat(movieDetail.imdbRating)
     const imdbVotes = parseInt(movieDetail.imdbVotes.replace(/,/g, ''))
-    let count = 0;
-    const awards = movieDetail.Awards.split(' ').forEach(word => {
+    let awardsCount = 0;
+    const awards = movieDetail.Awards.split(' ').forEach((word) => {          //or reduce() can be used 
         const value = parseInt(word)
-        if (isNaN(value)) {         //check if word is a number
-            return           //return null
-        }
-        else {
-            return count = count + value         //add all numbers
+        if (!isNaN(value)) {         //check if word is not a number
+            return awardsCount = awardsCount + value         //add all numbers
         }
     });
-    console.log(count);
-
     return `
         <article class='media'>
             <figure class='media-left'>
@@ -103,23 +105,23 @@ const movieTemplate = movieDetail => {
                 </div>
             </div>
         </article>
-        <article class='notification is-primary'>
+        <article data-value=${awardsCount} class='notification is-primary'>
             <p class='title'>${movieDetail.Awards}</p>
             <p class='subtitle'>Awards</p>
         </article>
-         <article class='notification is-primary'>
+         <article data-value=${dollars} class='notification is-primary'>
             <p class='title'>${movieDetail.BoxOffice}</p>
             <p class='subtitle'>Box Office</p>
         </article>
-         <article class='notification is-primary'>
+         <article data-value=${metascore} class='notification is-primary'>
             <p class='title'>${movieDetail.Metascore}</p>
             <p class='subtitle'>Metascore</p>
         </article>
-         <article class='notification is-primary'>
+         <article data-value=${imdbRating} class='notification is-primary'>
             <p class='title'>${movieDetail.imdbRating}</p>
             <p class='subtitle'>IMDB Rating</p>
         </article>
-         <article class='notification is-primary'>
+         <article data-value=${imdbVotes} class='notification is-primary'>
             <p class='title'>${movieDetail.imdbVotes}</p>
             <p class='subtitle'>IMDB Votes</p>
         </article>
