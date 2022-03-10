@@ -1,7 +1,6 @@
 //config object specific to application
-createAutoComplete({
-    root: document.querySelector('.autocomplete'),
 
+const autoCompleteConfig = {
     renderOption(movie) {                  //how movie item in search results will look
         const imgSrc = movie.Poster === 'N/A' ? '' : movie.Poster   //for broken images show nothing
         return `
@@ -30,6 +29,16 @@ createAutoComplete({
         }
         return response.data.Search            //returns a promise
     }
+
+}
+createAutoComplete({
+    ...autoCompleteConfig,         //copy autoCompleteConfig object properties
+    root: document.querySelector('#left-autocomplete'),
+})
+
+createAutoComplete({
+    ...autoCompleteConfig,         //copy autoCompleteConfig object properties
+    root: document.querySelector('#right-autocomplete'),
 })
 
 const onMovieSelect = async movie => {
