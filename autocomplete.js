@@ -1,6 +1,6 @@
-const createAutoComplete = ({ root, renderOption }) => {               //application specific data is sent through config object  //root is key
+const createAutoComplete = ({ root, renderOption, onOptionSelect, inputValue, fetchData }) => {               //application specific data is sent through config object  //root is key
     root.innerHTML = `
-    <label><b>Search for a movie</b></label>
+    <label><b>Search</b></label>
     <input class="input">
     <div class="dropdown">
         <div class="dropdown-menu">
@@ -13,21 +13,21 @@ const createAutoComplete = ({ root, renderOption }) => {               //applica
     const resultsWrapper = root.querySelector('.results')
 
     const onInput = async event => {                    //add async sice we are adding await
-        const movies = await fetchData(event.target.value)          //send input value to api to search movie        //returns promise so add await
-        if (!movies.length) {
+        const items = await fetchData(event.target.value)          //send input value to api to search movie        //returns promise so add await
+        if (!items.length) {
             dropdown.classList.remove('is-active')
             return
         }
         dropdown.classList.add('is-active')
         resultsWrapper.innerHTML = ''            //to clear the last search results and avoid overriding results
-        for (let movie of movies) {
+        for (let item of items) {
             const option = document.createElement('a')
             option.classList.add('dropdown-item')
-            option.innerHTML = renderOption(movie)
+            option.innerHTML = renderOption(item)
             option.addEventListener('click', () => {
                 dropdown.classList.remove('is-active')    //close dropdown on selecting option
-                input.value = movie.Title               //to update movie title in input field when selected
-                onMovieSelect(movie)
+                input.value = inputValue(item)               //to update movie title in input field when selected
+                onOptionSelect(item)
             })
             resultsWrapper.appendChild(option)
         }

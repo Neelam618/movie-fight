@@ -1,24 +1,34 @@
-const fetchData = async (searchTerm) => {
-    const response = await axios.get('http://www.omdbapi.com', {
-        params: {                //query params passed
-            apikey: '279fb3a4',
-            s: searchTerm            //for searching the movie containing searchTerm
-        }
-    })
-    if (response.data.Error) {
-        return []
-    }
-    return response.data.Search            //returns a promise
-}
-
+//config object specific to application
 createAutoComplete({
     root: document.querySelector('.autocomplete'),
+
     renderOption(movie) {                  //how movie item in search results will look
         const imgSrc = movie.Poster === 'N/A' ? '' : movie.Poster   //for broken images show nothing
         return `
             <img src="${imgSrc}">
             ${movie.Title} (${movie.Year})
         `;
+    },
+
+    onOptionSelect(movie) {
+        onMovieSelect(movie)
+    },
+
+    inputValue(movie) {
+        return movie.Title
+    },
+
+    async fetchData(searchTerm) {
+        const response = await axios.get('http://www.omdbapi.com', {
+            params: {                //query params passed
+                apikey: '279fb3a4',
+                s: searchTerm            //for searching the movie containing searchTerm
+            }
+        })
+        if (response.data.Error) {
+            return []
+        }
+        return response.data.Search            //returns a promise
     }
 })
 
