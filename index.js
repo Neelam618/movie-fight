@@ -32,7 +32,7 @@ createAutoComplete({
     ...autoCompleteConfig,         //copy autoCompleteConfig object properties
     root: document.querySelector('#left-autocomplete'),
     onOptionSelect(movie) {
-        onMovieSelect(movie, document.querySelector('#left-summary'))
+        onMovieSelect(movie, document.querySelector('#left-summary'), 'left')
         document.querySelector('.tutorial').classList.add('is-hidden')
     },
 })
@@ -41,12 +41,13 @@ createAutoComplete({
     ...autoCompleteConfig,         //copy autoCompleteConfig object properties
     root: document.querySelector('#right-autocomplete'),
     onOptionSelect(movie) {
-        onMovieSelect(movie, document.querySelector('#right-summary'))
+        onMovieSelect(movie, document.querySelector('#right-summary'), 'right')
         document.querySelector('.tutorial').classList.add('is-hidden')
     },
 })
-
-const onMovieSelect = async (movie, summaryElement) => {
+let leftMovie;
+let rightMovie;
+const onMovieSelect = async (movie, summaryElement, side) => {
     const response = await axios.get('http://www.omdbapi.com', {
         params: {                //query params passed
             apikey: '279fb3a4',
@@ -54,9 +55,39 @@ const onMovieSelect = async (movie, summaryElement) => {
         }
     })
     summaryElement.innerHTML = movieTemplate(response.data)     //render movie details
+
+    if (side === 'left') {
+        leftMovie = response.data
+    }
+    else {
+        rightMovie = response.data
+    }
+
+    if (leftMovie && rightMovie) {
+        runComparison()
+    }
 }
 
+// const runComparison = () = {
+
+// }
 const movieTemplate = movieDetail => {
+    const dollars = parseInt(movieDetail.BoxOffice.replace(/\$/g, '').replace(/,/g, ''))  //remove dollar sign and comma and convert string into number
+    const metascore = parseInt(movieDetail.Metascore)       //convert string into number
+    const imdbRating = parseFloat(movieDetail.imdbRating)
+    const imdbVotes = parseInt(movieDetail.imdbVotes.replace(/,/g, ''))
+    let count = 0;
+    const awards = movieDetail.Awards.split(' ').forEach(word => {
+        const value = parseInt(word)
+        if (isNaN(value)) {         //check if word is a number
+            return           //return null
+        }
+        else {
+            return count = count + value         //add all numbers
+        }
+    });
+    console.log(count);
+
     return `
         <article class='media'>
             <figure class='media-left'>
