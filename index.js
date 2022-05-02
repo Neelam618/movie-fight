@@ -14,7 +14,7 @@ const autoCompleteConfig = {
     },
 
     async fetchData(searchTerm) {
-        const response = await axios.get('http://www.omdbapi.com', {
+        const response = await axios.get('//www.omdbapi.com', {
             params: {                //query params passed
                 apikey: '279fb3a4',
                 s: searchTerm            //for searching the movie containing searchTerm
@@ -45,10 +45,11 @@ createAutoComplete({
         document.querySelector('.tutorial').classList.add('is-hidden')
     },
 })
+
 let leftMovie;
 let rightMovie;
 const onMovieSelect = async (movie, summaryElement, side) => {
-    const response = await axios.get('http://www.omdbapi.com', {
+    const response = await axios.get('//www.omdbapi.com', {
         params: {                //query params passed
             apikey: '279fb3a4',
             i: movie.imdbID            //for getting the movie details
